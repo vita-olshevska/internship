@@ -19,6 +19,9 @@ def decompose(number: int, count: int) -> list:
     :param count: how much numbers of the decomposition we need
     :return: decomposition of the number, which consists "count" numbers
     '''
+    if count > number:
+        raise ValueError("Number need to be greater than count.")
+
     decomposition = []
     for i in range(1, count):
         decomposition.append(random.randint(1, number - (count - i) - sum(decomposition)))
@@ -33,6 +36,15 @@ def create_password(list_of_parts: list, list_of_lengths: list) -> str:
     :param list_of_lengths: every element in this list is a number of chosen characters of corresponding string
     :return: password
     '''
+    if type(list_of_parts) is not list:
+        raise TypeError("list_of_parts must have the type list.")
+
+    if type(list_of_lengths) is not list:
+        raise TypeError("list_of_lengths must have the type list.")
+
+    if len(list_of_parts) != len(list_of_lengths):
+        raise ValueError("Lengths of list_of parts and list_of_lengths must be equal.")
+
     password_list = []
     for part, number in zip(list_of_parts, list_of_lengths):
         password_list += [random.choice(part) for _ in range(number)]
@@ -41,8 +53,9 @@ def create_password(list_of_parts: list, list_of_lengths: list) -> str:
     return "".join(password_list)
 
 
-password_length = random.randint(MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)
-decomposition_of_length = decompose(password_length, len(PASSWORD_PARTS))
-password = create_password(PASSWORD_PARTS, decomposition_of_length)
+if __name__ == "__main__":
+    password_length = random.randint(MIN_PASSWORD_LENGTH, MAX_PASSWORD_LENGTH)
+    decomposition_of_length = decompose(password_length, len(PASSWORD_PARTS))
+    password = create_password(PASSWORD_PARTS, decomposition_of_length)
 
-print(password)
+    print(password)
